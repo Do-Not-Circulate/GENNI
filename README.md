@@ -19,9 +19,10 @@ To use our package...
 ``` 
 >>> from GENNI import genni_vis
 >>> plot = genni_vis(mesh, V, X, Y, eigenpairs)
->>> plot.optimize()```
-
+>>> plot.optimize()
+```
 ...
+
 
 ```
 python demo_dragon.py --help
