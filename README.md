@@ -1,8 +1,8 @@
-# GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability
+# GENNIm: Visualising the Geometry of Equivalences for Neural Network Identifiability
 
 ## Disclaimer
 
-This is code associated with the paper "GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability," published in the [NeurIPS](https://nips.cc/) Workshop on [Differential Geometry meets Deep Learning 2020](https://sites.google.com/view/diffgeo4dl/). 
+This is code associated with the paper "GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability," published in the [NeurIPS](https://nips.cc/) Workshop on [Differential Geometry meets Deep Learning 2020](https://sites.google.com/view/diffgeo4dl/).
 
 ## Preliminaries
 
@@ -16,13 +16,13 @@ pip install -r requirements.txt
 
 To use our package...
 
-``` 
+```
 >>> from GENNI import genni_vis
 >>> plot = genni_vis(mesh, V, X, Y, eigenpairs)
 >>> plot.optimize()
 ```
-...
 
+...
 
 ```
 python demo_dragon.py --help
@@ -46,8 +46,6 @@ optional arguments:
                         Number of random samples to generate
 ```
 
-   
-
 ## Citing
 
 ```
@@ -59,8 +57,13 @@ optional arguments:
 }
 ```
 
+## TODO LIST
 
-
-
-
-
+- [ ] Licence (pick a standard one)
+- [ ] Documentation
+- [ ] Github actions
+  - Contributing
+  - Pull request / Issues templates
+- [ ] Put on PyPI
+- [ ] CI
+- [ ] Make package conform to PEP and packaging standards
