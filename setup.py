@@ -18,11 +18,10 @@ setup(
     ],
     python_requires=">=3.6",
     install_requires=[
-        "pickle",
         "pyyaml",
         "torch",
         "torchvision",
-        "ray[tune]==1.0.0",
+        "ray[tune]",
         "numpy",
         "matplotlib",
         "pandas",
