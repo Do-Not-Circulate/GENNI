@@ -2,7 +2,10 @@
 
 ## Disclaimer
 
-This is code associated with the paper "GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability," published in the [NeurIPS](https://nips.cc/) Workshop on [Differential Geometry meets Deep Learning 2020](https://sites.google.com/view/diffgeo4dl/).
+This is code associated with the paper "GENNI: Visualising the Geometry of
+Equivalences for Neural Network Identifiability," published in the
+[NeurIPS](https://nips.cc/) Workshop on [Differential Geometry meets Deep
+Learning 2020](https://sites.google.com/view/diffgeo4dl/).
 
 ## Preliminaries
 
@@ -46,7 +49,14 @@ optional arguments:
                         Number of random samples to generate
 ```
 
+## Reproducing the paper
+
+- [ ] How to reproduce figures
+- [ ] How to reproduce values
+
 ## Citing
+
+If you use GENNI anywhere in your work, please cite use using
 
 ```
 @article{2020,
