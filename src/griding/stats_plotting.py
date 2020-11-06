@@ -1,18 +1,24 @@
 import numpy as np
 import pandas as pd
 import pickle, os, yaml, sys, re
-from cycler import cycler
 import torch
 from torch.utils.data import DataLoader
-import sys
-import scipy
-
-import re
 
 from .postprocessing import *
 from ..nets import Nets
 from ..utils import *
 
+
+def different_cols(df):
+    a = df.to_numpy()  # df.values (pandas<0.24)
+    return (a[0] != a[1:]).any(0)
+
+
+def get_hp(cfs):
+    filter_cols = different_cols(cfs)
+    hp_names = cfs.columns[filter_cols]
+    hp_dict = {hp: cfs[hp].unique() for hp in hp_names}
+    return hp_dict
 
 def get_models_loss(models, data_set, criterion, device=None, seed=None):
     set_seed(seed)
@@ -28,9 +34,7 @@ def get_models_loss(models, data_set, criterion, device=None, seed=None):
     return loss_dict
 
 
-# Ok not to have explicit seed since we are using the whole dataset.
 def get_exp_loss(experiment_folder, step, num_datapoints=-1, seed=0, device=None):
-    print("Get loss")
     # init
     loss_dict = {}    
 
@@ -53,18 +57,6 @@ def get_exp_loss(experiment_folder, step, num_datapoints=-1, seed=0, device=None
         cache_data(experiment_folder, "loss", loss_dict, step=step)
 
     return loss_dict
-    
-
-def different_cols(df):
-    a = df.to_numpy()  # df.values (pandas<0.24)
-    return (a[0] != a[1:]).any(0)
-
-
-def get_hp(cfs):
-    filter_cols = different_cols(cfs)
-    hp_names = cfs.columns[filter_cols]
-    hp_dict = {hp: cfs[hp].unique() for hp in hp_names}
-    return hp_dict
 
 
 def get_end_stats(exp_folder, step=-1, with_min_max=False):
@@ -81,8 +73,9 @@ def get_end_stats(exp_folder, step=-1, with_min_max=False):
 
         stats_dict[str(exp_id)] = {}
 
-        if loss is not None:
-            Loss_list = [loss[exp_id][str(nn)] for nn in range(num_nets)]
+        # make this multi index. Otherwise should be mostly godo
+        for nn in range(num_nets):
+            Loss_list = [loss[exp_id][str(nn)] ]
 
             stats_dict[str(exp_id)]["Loss Mean"] = np.mean(Loss_list)
 
@@ -101,9 +94,9 @@ def get_end_stats(exp_folder, step=-1, with_min_max=False):
     return stats_pd
 
 def main():
-    # # # save analysis processsing
+    # example use
 
-    root_folder = os.environ["PATH_TO_DNC_FOLDER"]
+    root_folder = os.environ["PATH_TO_GENNI_FOLDER"]
     exp = ""
     experiment_folder = os.path.join(root_folder, "experiments", exp)
 
@@ -114,11 +107,6 @@ def main():
         device = torch.device("cuda:0")
     else:
         device = None
-        # device = torch.device("cpu")
-
-    # get_runs(experiment_folder, ["Loss", "Kish", "Potential", "Accuracy", "WeightVarTrace", "Norm",
-    #                          "Trace", "Gradient"])  # TODO does not find acc and var
-
 
     # # compute all loss over time 
     f = lambda step: get_exp_loss(experiment_folder, step, num_datapoints=-1, device=device)

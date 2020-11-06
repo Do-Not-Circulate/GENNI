@@ -40,18 +40,17 @@ def train(config, folder_path):
 
     #  Define a Loss function and optimizer
     criterion = torch.nn.MSELoss(reduction="mean")
-    optimizers = get_optimizers(config, nets)
+    optimizers = [optim.SGD(nets[i].parameters(), lr=config["learning_rate"],
+                            momentum=config["momentum"]) for i in range(num_nets)]
 
     # define stopping criterion
     stopping_criterion = get_stopping_criterion(config["num_steps"], config["mean_loss_threshold"])
 
 
     # init saving
-    file_stamp = str(time.time())  # get_file_stamp()
-    writer = SummaryWriter("{}/runs/{}".format(folder_path, file_stamp))
-    with open("{}/runs/{}/{}".format(folder_path, file_stamp, "config.yml"), "w") as f:
-        yaml.dump(config, f, default_flow_style=False)
-
+    process_id = str(time.time())  
+    writer = init_summary_writer(folder_path, process_id)
+    save_config(folder_path, process_id, config)
     save_models(nets, config["net_name"], config["net_params"], folder_path, file_stamp, step=0)
 
     # init number of steps

@@ -1,14 +1,9 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import torch
-from torch.utils.data import DataLoader
-import torch.optim as optim
 
 import datetime
 import socket, sys, os, copy
-
 from collections import defaultdict
-from tensorflow.python.summary.summary_iterator import summary_iterator
 
 from .nets.Nets import *
 
@@ -89,22 +84,4 @@ def get_net_loss(net, data_loader, criterion, full_dataset=False, device=None):
 
     return loss_sum / (idx + 1)
 
-
-def get_model_outputs(net, data, softmax_outputs=False, device=None):
-
-    inputs, labels = iter(DataLoader(data, batch_size=len(data))).next()
-
-    if device is not None:
-        inputs, labels = inputs.to(device).type(torch.cuda.FloatTensor), labels.to(device).type(
-            torch.cuda.LongTensor)
-    else:
-        inputs = inputs.float()
-
-    outputs = net(inputs)
-    
-    if softmax_outputs:
-        m = torch.nn.Softmax(dim=-1)
-        outputs = m(outputs)
-        
-    return outputs
 

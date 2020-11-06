@@ -1,13 +1,13 @@
 import numpy as np
-from ..utils import *
-from ..data_getters import *
-from ..postprocessing.postprocessing import *
 
 import copy
 import torch
 from tqdm import tqdm
 import itertools
 
+from ..utils import *
+from ..data_getters import *
+from ..postprocessing.postprocessing import *
 
 def get_coordinates(v, basis_vectors, offset_v):
 
@@ -68,24 +68,11 @@ def gram_schmidt_columns(X):
     Q, R = np.linalg.qr(X)
     return Q
 
-def create_offset_orthonorm_basis_new(center_model, basis_vectors):
+def create_offset_orthonorm_basis(center_model, basis_vectors):
     basis_vectors = [(basis_vectors[i] - get_params_vec(center_model)).detach().numpy() for i in range(len(basis_vectors))]
     basis_vectors = np.array(basis_vectors)
     return gram_schmidt_columns(basis_vectors.T).T
 
-def create_offset_basis(offset, model1, model2):
-    """When time, replace usage of this function with "create_offset_orthonorm_basis_new" """
-    v1_vec = get_params_vec(model1) - get_params_vec(offset)
-    w2_vec = get_params_vec(model2) - get_params_vec(offset)
-    proj_w2 = torch.matmul(v1_vec, w2_vec) * v1_vec / torch.norm(v1_vec) ** 2
-    assert torch.norm(proj_w2) != torch.norm(w2_vec) # make sure not lin dep
-    v2_vec = w2_vec - proj_w2
-    v2_vec = (v2_vec/torch.norm(v2_vec)) * torch.norm(v1_vec)
-    # coordinates
-    c_offset = (0, 0) # (x, y)
-    c_w1 = (1, 0)
-    c_w2 = (float(torch.dot(w2_vec, v1_vec)/(torch.norm(v1_vec)**2)), float(torch.dot(w2_vec, v2_vec)/(torch.norm(v2_vec)**2)))    
-    return offset, v1_vec, v2_vec, c_offset, c_w1, c_w2
 
 
 if __name__ == "__main__":

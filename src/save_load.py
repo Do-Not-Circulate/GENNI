@@ -1,16 +1,18 @@
 import numpy as np
-import pandas as pd
 import torch
 
 from .utils import *
 from .training_utils import get_nets
-
-import yaml, os, sys, re, copy
 from .nets.Nets import *
-
 from .data_getters import *
 
-import pickle
+import yaml, os, sys, re, copy, pickle
+
+
+"""File for saving and loading. Assumes an experiment_folder path in which can data can be freely written and modified. For specific processes it also requires
+a process_id. Nothing will be stored above the experiment_folder path.
+
+Every method should call one of these methods for any saving/loading tasks."""
 
 def get_exp_steps(experiment_folder):
     exp_steps = {}
@@ -140,8 +142,12 @@ def load_configs(experiment_folder):
             config = yaml.load(f)
         config_dir[curr_dir] = config
         config_dir[curr_dir]["net_params"] = tuple(config_dir[curr_dir]["net_params"])
-        if ("softmax_adaptive" in config_dir[curr_dir]) and (
-        isinstance(config_dir[curr_dir]["softmax_adaptive"], list)):
-            config_dir[curr_dir]["softmax_adaptive"] = tuple(config_dir[curr_dir]["softmax_adaptive"])
 
     return pd.DataFrame(config_dir).T
+
+def save_config(experiment_folder, process_id, config):
+    with open(os.path.join(experiment_folder, "runs", process_id, "config.yml"), "w") as f:
+        yaml.dump(config, f, default_flow_style=False)
+
+def init_summary_writer(experiment_folderprocess_id):
+        return SummaryWriter(os.path.join(experiment_folder, "runs", process_id))

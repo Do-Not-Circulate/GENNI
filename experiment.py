@@ -1,7 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import torch
-import torchvision
 from ray import tune
 
 from .utils import *
@@ -10,7 +8,6 @@ from .postprocessing import *
 from .data_getters import get_data
 
 import sys, os
-import pickle
 
 config = {}
 
@@ -73,7 +70,9 @@ config["print_stat_freq"] = 25
 
 # --- Set up folder in which to store all results ---
 folder_name = get_file_stamp()
-cwd = os.environ["PATH_TO_DNC_FOLDER"]
+
+# TODO set to path where saving has to happen.
+cwd = os.environ["PATH_TO_GENNI_FOLDER"]
 folder_path = os.path.join(cwd, "experiments", folder_name)
 print(folder_path)
 os.makedirs(folder_path)
