@@ -32,7 +32,7 @@ def get_models_loss(models, data_set, criterion, device=None, seed=None):
 def get_exp_loss(experiment_folder, step, num_datapoints=-1, seed=0, device=None):
     print("Get loss")
     # init
-    loss_dict = {}    
+    loss_dict = {}
 
     cfgs = load_configs(experiment_folder)
 
@@ -42,18 +42,21 @@ def get_exp_loss(experiment_folder, step, num_datapoints=-1, seed=0, device=None
         models_dict = get_models(curr_path, step, device)
 
         data_set = get_data(cfgs.loc[exp_name], device=device)
-        
-        data_loader = DataLoader(data_set, batch_size=cfgs.loc[exp_name]["batch_size"], shuffle=False)
+
+        data_loader = DataLoader(
+            data_set, batch_size=cfgs.loc[exp_name]["batch_size"], shuffle=False
+        )
 
         if models_dict is None:
             continue
-        loss_dict[exp_name] = get_models_loss(models_dict, data_loader, criterion,
-                                                                      device=device)
+        loss_dict[exp_name] = get_models_loss(
+            models_dict, data_loader, criterion, device=device
+        )
         # cache data
         cache_data(experiment_folder, "loss", loss_dict, step=step)
 
     return loss_dict
-    
+
 
 def different_cols(df):
     a = df.to_numpy()  # df.values (pandas<0.24)
@@ -68,7 +71,7 @@ def get_hp(cfs):
 
 
 def get_end_stats(exp_folder, step=-1, with_min_max=False):
-    
+
     loss, _ = load_cached_data(exp_folder, "loss", step=step)
 
     stats_dict = {}
@@ -90,7 +93,6 @@ def get_end_stats(exp_folder, step=-1, with_min_max=False):
                 stats_dict[str(exp_id)]["Loss Max"] = np.max(Loss_list)
                 stats_dict[str(exp_id)]["Loss Min"] = np.min(Loss_list)
 
-
     stats_pd = pd.DataFrame.from_dict(stats_dict, orient="index")
 
     # append hyperparameters to DataFrame
@@ -99,6 +101,7 @@ def get_end_stats(exp_folder, step=-1, with_min_max=False):
     stats_pd = pd.concat([stats_pd, cfs_hp_df], axis=1)
 
     return stats_pd
+
 
 def main():
     # # # save analysis processsing
@@ -119,7 +122,8 @@ def main():
     # get_runs(experiment_folder, ["Loss", "Kish", "Potential", "Accuracy", "WeightVarTrace", "Norm",
     #                          "Trace", "Gradient"])  # TODO does not find acc and var
 
-
-    # # compute all loss over time 
-    f = lambda step: get_exp_loss(experiment_folder, step, num_datapoints=-1, device=device)
+    # # compute all loss over time
+    f = lambda step: get_exp_loss(
+        experiment_folder, step, num_datapoints=-1, device=device
+    )
     get_all_steps_f(experiment_folder, f)

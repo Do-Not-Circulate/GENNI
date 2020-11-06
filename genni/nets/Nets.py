@@ -22,7 +22,9 @@ class LeNet(Module):
         self.conv2 = nn.Conv2d(6, 16, 5)
         self.relu2 = nn.ReLU()
         self.pool2 = nn.MaxPool2d(2)
-        self.fc1 = nn.Linear(int(16 * (height - 12)/4 * (width - 12)/4), 120) # Each conv subtracts by 4 and MaxPool divides size by 2.
+        self.fc1 = nn.Linear(
+            int(16 * (height - 12) / 4 * (width - 12) / 4), 120
+        )  # Each conv subtracts by 4 and MaxPool divides size by 2.
         self.relu3 = nn.ReLU()
         self.fc2 = nn.Linear(120, 84)
         self.relu4 = nn.ReLU()
@@ -47,13 +49,13 @@ class LeNet(Module):
 
 
 class SimpleNet(Module):
-   
-
     def __init__(self, inp_dim, out_dim, width, num_layers, add_bias=True):
         super(SimpleNet, self).__init__()
 
         self.fc_input = nn.Linear(inp_dim, width, bias=add_bias)
-        self.layers = nn.ModuleList([nn.Linear(width, width, bias=add_bias) for _ in range(num_layers - 1)])
+        self.layers = nn.ModuleList(
+            [nn.Linear(width, width, bias=add_bias) for _ in range(num_layers - 1)]
+        )
         self.fc_final = nn.Linear(width, out_dim, bias=add_bias)
 
     def forward(self, x):
@@ -63,16 +65,17 @@ class SimpleNet(Module):
         x = self.fc_final(x)
         return x
 
+
 class LinearNet(Module):
     def __init__(self, inp_dim, out_dim):
         super(LinearNet, self).__init__()
 
         self.fc_layer = nn.Linear(inp_dim, out_dim)
-    
 
     def forward(self, x):
         x = self.fc_layer(x)
         return x
+
 
 class BatchNormSimpleNet(Module):
     def __init__(self, inp_dim, out_dim):
@@ -103,30 +106,41 @@ class BatchNormSimpleNet(Module):
         return x
 
 
-
-    
 class KeskarC3(Module):
-
     def __init__(self, height, width, channels, out_dim):
         super(KeskarC3, self).__init__()
 
-        H_conv_padding = int((height + 3)/2) + 1 - (height % 2)
-        W_conv_padding = int((width + 3)/2) + 1 - (width % 2)
+        H_conv_padding = int((height + 3) / 2) + 1 - (height % 2)
+        W_conv_padding = int((width + 3) / 2) + 1 - (width % 2)
 
-        self.H_pool_padding = int((height + 1)/2) + 1 - (height % 2)
-        self.W_pool_padding = int((width + 1)/2) + 1 - (width % 2)
+        self.H_pool_padding = int((height + 1) / 2) + 1 - (height % 2)
+        self.W_pool_padding = int((width + 1) / 2) + 1 - (width % 2)
 
-        self.conv1 = nn.Conv2d(in_channels=channels, out_channels=64, kernel_size=[5, 5], stride=2, padding=(H_conv_padding, W_conv_padding))
+        self.conv1 = nn.Conv2d(
+            in_channels=channels,
+            out_channels=64,
+            kernel_size=[5, 5],
+            stride=2,
+            padding=(H_conv_padding, W_conv_padding),
+        )
         self.bn1 = nn.BatchNorm2d(num_features=64)
         self.pool1 = nn.MaxPool2d(kernel_size=(3, 3), stride=2)
 
-        self.conv2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=[5, 5], stride=2, padding=(H_conv_padding, W_conv_padding))
+        self.conv2 = nn.Conv2d(
+            in_channels=64,
+            out_channels=64,
+            kernel_size=[5, 5],
+            stride=2,
+            padding=(H_conv_padding, W_conv_padding),
+        )
         self.bn2 = nn.BatchNorm2d(num_features=64)
         self.pool2 = nn.MaxPool2d(kernel_size=(3, 3), stride=2)
 
-        self.num_features_before_fcnn = 64*height*width
+        self.num_features_before_fcnn = 64 * height * width
 
-        self.fc1 = nn.Linear(in_features=self.num_features_before_fcnn, out_features=384)
+        self.fc1 = nn.Linear(
+            in_features=self.num_features_before_fcnn, out_features=384
+        )
         self.bn3 = nn.BatchNorm1d(num_features=384)
         self.dp1 = nn.Dropout(p=0.5)
 
@@ -135,17 +149,32 @@ class KeskarC3(Module):
         self.dp2 = nn.Dropout(p=0.5)
 
         self.out_layer = nn.Linear(in_features=192, out_features=out_dim)
-        
 
     def forward(self, x):
         batch_size = x.size(0)
 
         x = F.relu(self.bn1(self.conv1(x)))
-        x = F.pad(x, pad=(self.H_pool_padding, self.H_pool_padding, self.W_pool_padding, self.W_pool_padding))
+        x = F.pad(
+            x,
+            pad=(
+                self.H_pool_padding,
+                self.H_pool_padding,
+                self.W_pool_padding,
+                self.W_pool_padding,
+            ),
+        )
         x = self.pool1(x)
 
         x = F.relu(self.bn2(self.conv2(x)))
-        x = F.pad(x, pad=(self.H_pool_padding, self.H_pool_padding, self.W_pool_padding, self.W_pool_padding))
+        x = F.pad(
+            x,
+            pad=(
+                self.H_pool_padding,
+                self.H_pool_padding,
+                self.W_pool_padding,
+                self.W_pool_padding,
+            ),
+        )
         x = self.pool2(x)
 
         x = x.view(batch_size, self.num_features_before_fcnn)  # flatten the vector

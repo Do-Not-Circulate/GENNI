@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.optim as optim
-from tensorflow.python.summary.summary_iterator import summary_iterator
 from torch.utils.data import DataLoader
 
 from .nets.Nets import *

@@ -12,11 +12,13 @@ from .data_getters import *
 
 import pickle
 
+
 def get_exp_steps(experiment_folder):
     exp_steps = {}
     for exp_name, curr_path in exp_models_path_generator(experiment_folder):
         exp_steps[exp_name] = get_all_steps(curr_path)
     return exp_steps
+
 
 def get_all_steps(steps_dir):
     step_dict = {}
@@ -59,11 +61,13 @@ def get_all_models(experiment_folder, step):
     return models_dict
 
 
-def cache_data(experiment_folder, name, data, meta_dict=None, step=None, time_stamp=False):
+def cache_data(
+    experiment_folder, name, data, meta_dict=None, step=None, time_stamp=False
+):
     cache_folder = os.path.join(experiment_folder, "postprocessing", name)
     if step is not None:
         cache_folder = os.path.join(cache_folder, "step_{}".format(step))
-    
+
     if time_stamp:
         cache_folder = os.path.join(cache_folder, get_time_stamp())
 
@@ -75,6 +79,7 @@ def cache_data(experiment_folder, name, data, meta_dict=None, step=None, time_st
     if meta_dict is not None:
         with open(os.path.join(cache_folder, "meta.yml"), "w") as f:
             yaml.dump(meta_dict, f)
+
 
 def load_cached_data(experiment_folder, name, step=None, time_stamp=None):
     cache_folder = os.path.join(experiment_folder, "postprocessing", name)
@@ -89,19 +94,21 @@ def load_cached_data(experiment_folder, name, step=None, time_stamp=None):
         with open(cached_data_path, "rb") as f:
             cached_data = pickle.load(f)
     else:
-        cached_data =  None
-    
+        cached_data = None
+
     cached_meta_path = os.path.join(cache_folder, "meta.yml")
     if os.path.isfile(cached_meta_path):
         with open(cached_meta_path, "rb") as f:
             cached_meta_data = yaml.load(f)
     else:
-        cached_meta_data  = None
+        cached_meta_data = None
 
     return cached_data, cached_meta_data
 
+
 def get_cached_data_list(experiment_folder):
     pass
+
 
 def exp_models_path_generator(experiment_folder):
     for curr_dir in os.listdir("{}/models".format(experiment_folder)):
@@ -112,27 +119,39 @@ def exp_models_path_generator(experiment_folder):
 
 
 def save_models(models, model_name, model_params, experiment_root, curr_exp_name, step):
-    models_path = os.path.join(experiment_root, "models", curr_exp_name, "step_{}".format(step))
+    models_path = os.path.join(
+        experiment_root, "models", curr_exp_name, "step_{}".format(step)
+    )
     if not os.path.exists(models_path):
         os.makedirs(models_path)
 
     for idx_model in range(len(models)):
-         torch.save({'model_name': model_name,
-                     'model_params': model_params,
-                     'model_state_dict': models[idx_model].state_dict()}
-                    , os.path.join(models_path, "model_{}.pt".format(idx_model)))
+        torch.save(
+            {
+                "model_name": model_name,
+                "model_params": model_params,
+                "model_state_dict": models[idx_model].state_dict(),
+            },
+            os.path.join(models_path, "model_{}.pt".format(idx_model)),
+        )
+
 
 def load_model(PATH, device=None):
     if device is None:
-        device = torch.device('cpu')
+        device = torch.device("cpu")
     meta_data = torch.load(PATH, map_location=device)
-    model = get_nets(meta_data["model_name"], meta_data["model_params"], num_nets=1, device=device)[0]
-    model.load_state_dict(meta_data['model_state_dict'])
+    model = get_nets(
+        meta_data["model_name"], meta_data["model_params"], num_nets=1, device=device
+    )[0]
+    model.load_state_dict(meta_data["model_state_dict"])
     return model
+
 
 def load_configs(experiment_folder):
     config_dir = {}
-    for root, dirs, files in os.walk("{}/runs".format(experiment_folder), topdown=False):
+    for root, dirs, files in os.walk(
+        "{}/runs".format(experiment_folder), topdown=False
+    ):
         if len(files) != 2:
             continue
         curr_dir = os.path.basename(root)
@@ -141,7 +160,10 @@ def load_configs(experiment_folder):
         config_dir[curr_dir] = config
         config_dir[curr_dir]["net_params"] = tuple(config_dir[curr_dir]["net_params"])
         if ("softmax_adaptive" in config_dir[curr_dir]) and (
-        isinstance(config_dir[curr_dir]["softmax_adaptive"], list)):
-            config_dir[curr_dir]["softmax_adaptive"] = tuple(config_dir[curr_dir]["softmax_adaptive"])
+            isinstance(config_dir[curr_dir]["softmax_adaptive"], list)
+        ):
+            config_dir[curr_dir]["softmax_adaptive"] = tuple(
+                config_dir[curr_dir]["softmax_adaptive"]
+            )
 
     return pd.DataFrame(config_dir).T

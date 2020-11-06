@@ -28,7 +28,7 @@ def train(config, folder_path):
 
     # set seed for the rest of SGD
     set_seed(config["seed"])
-    
+
     # get dataloaders
     # --- get data ---
     data_set = get_data(config, device)
@@ -43,8 +43,9 @@ def train(config, folder_path):
     optimizers = get_optimizers(config, nets)
 
     # define stopping criterion
-    stopping_criterion = get_stopping_criterion(config["num_steps"], config["mean_loss_threshold"])
-
+    stopping_criterion = get_stopping_criterion(
+        config["num_steps"], config["mean_loss_threshold"]
+    )
 
     # init saving
     file_stamp = str(time.time())  # get_file_stamp()
@@ -52,14 +53,16 @@ def train(config, folder_path):
     with open("{}/runs/{}/{}".format(folder_path, file_stamp, "config.yml"), "w") as f:
         yaml.dump(config, f, default_flow_style=False)
 
-    save_models(nets, config["net_name"], config["net_params"], folder_path, file_stamp, step=0)
+    save_models(
+        nets, config["net_name"], config["net_params"], folder_path, file_stamp, step=0
+    )
 
     # init number of steps
-    curr_step = 1 
+    curr_step = 1
     mean_loss = float("inf")
 
     # train
-    while (not stopping_criterion(mean_loss, curr_step)):
+    while not stopping_criterion(mean_loss, curr_step):
 
         # get train loaders for each net
         net_data_loaders = [iter(data_loader) for _ in range(num_nets)]
@@ -68,10 +71,16 @@ def train(config, folder_path):
         while is_training_curr and (not stopping_criterion(mean_loss, curr_step)):
 
             # do update step for each net
-            nets, took_step, mean_loss_after_step = nets_training_step(nets, optimizers,
-                                                                                net_data_loaders, criterion,
-                                                                                writer=writer, curr_step=curr_step, device=device)
-            
+            nets, took_step, mean_loss_after_step = nets_training_step(
+                nets,
+                optimizers,
+                net_data_loaders,
+                criterion,
+                writer=writer,
+                curr_step=curr_step,
+                device=device,
+            )
+
             if not took_step:
                 break
             else:
@@ -79,8 +88,15 @@ def train(config, folder_path):
 
             # save nets
             if (curr_step % config["save_model_freq"]) == 1:
-                save_models(nets, config["net_name"], config["net_params"], folder_path, file_stamp, step=curr_step)
-        
+                save_models(
+                    nets,
+                    config["net_name"],
+                    config["net_params"],
+                    folder_path,
+                    file_stamp,
+                    step=curr_step,
+                )
+
             if (curr_step % config["print_stat_freq"]) == 1:
                 print("Step: {}".format(curr_step))
                 print("Mean Loss: {}".format(mean_loss))
@@ -89,12 +105,27 @@ def train(config, folder_path):
             curr_step += 1
 
     # save final nets
-    save_models(nets, config["net_name"], config["net_params"], folder_path, file_stamp, step=curr_step)
+    save_models(
+        nets,
+        config["net_name"],
+        config["net_params"],
+        folder_path,
+        file_stamp,
+        step=curr_step,
+    )
 
     return nets
 
-def nets_training_step(nets, net_optimizers, net_data_loaders, criterion,
-                    writer=None, curr_step=-1, device=None):
+
+def nets_training_step(
+    nets,
+    net_optimizers,
+    net_data_loaders,
+    criterion,
+    writer=None,
+    curr_step=-1,
+    device=None,
+):
     """Does update step on all networks and computes the weights."""
     took_step = True
 
@@ -106,9 +137,17 @@ def nets_training_step(nets, net_optimizers, net_data_loaders, criterion,
         net = nets[idx_net]
         optimizer = net_optimizers[idx_net]
         iter_data_loader = net_data_loaders[idx_net]
-        
-        net, curr_net_taking_step, loss = training_step(net, iter_data_loader, optimizer, criterion, 
-                                                         writer=writer, curr_step=curr_step, idx_net=idx_net, device=device)
+
+        net, curr_net_taking_step, loss = training_step(
+            net,
+            iter_data_loader,
+            optimizer,
+            criterion,
+            writer=writer,
+            curr_step=curr_step,
+            idx_net=idx_net,
+            device=device,
+        )
 
         if not curr_net_taking_step:
             took_step = False
@@ -116,30 +155,41 @@ def nets_training_step(nets, net_optimizers, net_data_loaders, criterion,
 
         mean_loss += float(loss)
 
-    assert took_step or (idx_net == 0) # if we can't take a step for one network then we shouldn't be able to take a step for any network. Checking the first net should hence suffice. 
+    assert took_step or (
+        idx_net == 0
+    )  # if we can't take a step for one network then we shouldn't be able to take a step for any network. Checking the first net should hence suffice.
 
     return nets, took_step, mean_loss / len(nets)
 
 
-
-def training_step(net, iter_data_loader, optimizer, criterion, writer=None, curr_step=-1, idx_net=-1, device=None):
+def training_step(
+    net,
+    iter_data_loader,
+    optimizer,
+    criterion,
+    writer=None,
+    curr_step=-1,
+    idx_net=-1,
+    device=None,
+):
     """Does update step on all networks and computes the weights."""
 
     took_step = True
-
 
     # get the inputs; data is a list of [inputs, labels]
     try:
         data = next(iter_data_loader)
     except:
         took_step = False
-        return net, took_step, None    
-    
+        return net, took_step, None
+
     inputs, labels = data
 
     if device is not None:
-        inputs, labels = inputs.to(device).type(torch.cuda.FloatTensor), labels.to(device).type(
-            torch.cuda.LongTensor)
+        inputs, labels = (
+            inputs.to(device).type(torch.cuda.FloatTensor),
+            labels.to(device).type(torch.cuda.LongTensor),
+        )
 
     # Compute gradients for input.
     inputs.requires_grad = True
@@ -159,10 +209,11 @@ def training_step(net, iter_data_loader, optimizer, criterion, writer=None, curr
 
     # store metrics for each net
     if writer is not None:
-        writer.add_scalar('Loss/train/net_{}'.format(idx_net), loss, curr_step)
-        writer.add_scalar('Gradient/train/net_{}'.format(idx_net), curr_grad, curr_step)
-        writer.add_scalar('Norm/net_{}'.format(idx_net), torch.norm(get_params_vec(net)), curr_step)
-
+        writer.add_scalar("Loss/train/net_{}".format(idx_net), loss, curr_step)
+        writer.add_scalar("Gradient/train/net_{}".format(idx_net), curr_grad, curr_step)
+        writer.add_scalar(
+            "Norm/net_{}".format(idx_net), torch.norm(get_params_vec(net)), curr_step
+        )
 
     assert took_step or (idx_net == 0)
 
