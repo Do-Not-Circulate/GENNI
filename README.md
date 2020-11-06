@@ -59,11 +59,12 @@ optional arguments:
 
 ## TODO LIST
 
-- [ ] Licence (pick a standard one)
+- [x] Licence (MIT)
 - [ ] Documentation
 - [ ] Github actions
   - Contributing
   - Pull request / Issues templates
 - [ ] Put on PyPI
+- [ ] Make environment?
 - [ ] CI
 - [ ] Make package conform to PEP and packaging standards
