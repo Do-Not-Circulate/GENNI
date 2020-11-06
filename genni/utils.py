@@ -3,16 +3,10 @@ import datetime
 import os
 import random
 import socket
-import sys
-from collections import defaultdict
 
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
-import torch.optim as optim
 from torch.utils.data import DataLoader
-
-from .nets.Nets import *
 
 
 def get_file_stamp():

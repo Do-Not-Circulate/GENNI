@@ -1,17 +1,12 @@
+import os
+
 import numpy as np
 import pandas as pd
-import pickle, os, yaml, sys, re
-from cycler import cycler
 import torch
 from torch.utils.data import DataLoader
-import sys
-import scipy
 
-import re
-
-from .postprocessing import *
-from ..nets import Nets
 from ..utils import *
+from .postprocessing import *
 
 
 def get_models_loss(models, data_set, criterion, device=None, seed=None):

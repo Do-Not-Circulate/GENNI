@@ -1,14 +1,8 @@
-import numpy as np
-import copy, yaml, pickle
 import torch
-import torchvision
 import torch.optim as optim
 
+from .nets.Nets import LeNet, LinearNet, SimpleNet
 from .utils import *
-from .nets.Nets import SimpleNet, LeNet, LinearNet
-
-from torch.utils.data import DataLoader
-import os, time
 
 
 def get_nets(net_name, net_params, num_nets, device=None):

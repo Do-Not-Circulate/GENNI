@@ -1,20 +1,13 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import copy, yaml, pickle
-import torch
-import torchvision
-import torch.optim as optim
+import time
 
+import torch
+import yaml
+from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
-from .utils import *
-from .training_utils import *
-from .nets.Nets import SimpleNet, LeNet
 from .save_load import *
-
-from torch.utils.data import DataLoader
-
-import os, time
+from .training_utils import *
+from .utils import *
 
 
 def train(config, folder_path):

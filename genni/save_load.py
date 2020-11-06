@@ -1,16 +1,14 @@
-import numpy as np
+import os
+import pickle
+
 import pandas as pd
 import torch
-
-from .utils import *
-from .training_utils import get_nets
-
-import yaml, os, sys, re, copy
-from .nets.Nets import *
+import yaml
 
 from .data_getters import *
-
-import pickle
+from .nets.Nets import *
+from .training_utils import get_nets
+from .utils import *
 
 
 def get_exp_steps(experiment_folder):

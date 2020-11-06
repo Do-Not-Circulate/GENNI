@@ -1,12 +1,13 @@
-import numpy as np
-from ..utils import *
-from ..data_getters import *
-from ..postprocessing.postprocessing import *
-
 import copy
+import itertools
+
+import numpy as np
 import torch
 from tqdm import tqdm
-import itertools
+
+from ..data_getters import *
+from ..postprocessing.postprocessing import *
+from ..utils import *
 
 
 def get_coordinates(v, basis_vectors, offset_v):
