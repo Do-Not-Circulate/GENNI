@@ -1,7 +1,9 @@
+import copy
+import datetime
+import os
 import random
 import socket
-import datetime, os
-import copy
+
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
