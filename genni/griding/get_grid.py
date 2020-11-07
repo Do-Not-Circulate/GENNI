@@ -64,14 +64,16 @@ def main(experiment_folder, exp_id, config, data_loader):
     func = lambda m: get_net_loss(
         m, data_loader, criterion, full_dataset=True, device=None
     )
-    three_d_vals = get_model_interpolate_grid(
+    grid_vals = get_model_interpolate_grid(
         center_model, basis_orthonorm_vectors, num_inter_models, grid_bound, func
     )
 
     cache_data(
         os.path.join(experiment_folder, exp_id),
         "{}d_loss".format(len(basis_vectors)),
-        three_d_vals,
+        grid_vals,
         meta_dict=config,
         time_stamp=True,
     )
+
+    return grid_vals, config
