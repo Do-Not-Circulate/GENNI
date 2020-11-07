@@ -1,10 +1,3 @@
-########################################################################
-# 2. Define a Convolutional Neural Network
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# Copy the neural network from the Neural Networks section before and modify it to
-# take 3-channel images (instead of 1-channel images as it was defined).
-
-
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import Module

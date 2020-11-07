@@ -1,14 +1,17 @@
+"""File for saving and loading. Assumes an experiment_folder path in which can data can be freely written and modified. For specific processes it also requires
+a process_id. Nothing will be stored above the experiment_folder path.
+
+Every method should call one of these methods for any saving/loading tasks."""
 import os
 import pickle
 
 import pandas as pd
 import torch
 import yaml
+from torch.utils.tensorboard import SummaryWriter
 
-from .data_getters import *
-from .nets.Nets import *
 from .training_utils import get_nets
-from .utils import *
+from .utils import get_time_stamp
 
 
 def get_exp_steps(experiment_folder):
@@ -165,3 +168,14 @@ def load_configs(experiment_folder):
             )
 
     return pd.DataFrame(config_dir).T
+
+
+def save_config(experiment_folder, process_id, config):
+    with open(
+        os.path.join(experiment_folder, "runs", process_id, "config.yml"), "w"
+    ) as f:
+        yaml.dump(config, f, default_flow_style=False)
+
+
+def init_summary_writer(experiment_folder, process_id):
+    return SummaryWriter(os.path.join(experiment_folder, "runs", process_id))

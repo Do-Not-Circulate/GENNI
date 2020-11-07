@@ -1,8 +1,7 @@
 import torch
 import torch.optim as optim
 
-from .nets.Nets import LeNet, LinearNet, SimpleNet
-from .utils import *
+from .nets.Nets import BatchNormSimpleNet, KeskarC3, LeNet, LinearNet, SimpleNet
 
 
 def get_nets(net_name, net_params, num_nets, device=None):

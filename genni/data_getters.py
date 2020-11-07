@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import DataLoader, Dataset
 
-from .save_load import *
+from .save_load import get_nets, set_seed
 
 """The vector for which we get equivalences is for now chosen by the model_seed given in the config file. """
 

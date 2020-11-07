@@ -2,12 +2,14 @@ import time
 
 import torch
 import yaml
+from torch import optim
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
-from .save_load import *
-from .training_utils import *
-from .utils import *
+from .data_getters import get_data
+from .save_load import init_summary_writer, save_config, save_models
+from .training_utils import get_nets, get_stopping_criterion
+from .utils import get_grad_params_vec, get_params_vec, set_seed
 
 
 def train(config, folder_path):
@@ -33,7 +35,14 @@ def train(config, folder_path):
 
     #  Define a Loss function and optimizer
     criterion = torch.nn.MSELoss(reduction="mean")
-    optimizers = get_optimizers(config, nets)
+    optimizers = [
+        optim.SGD(
+            nets[i].parameters(),
+            lr=config["learning_rate"],
+            momentum=config["momentum"],
+        )
+        for i in range(num_nets)
+    ]
 
     # define stopping criterion
     stopping_criterion = get_stopping_criterion(
@@ -41,13 +50,11 @@ def train(config, folder_path):
     )
 
     # init saving
-    file_stamp = str(time.time())  # get_file_stamp()
-    writer = SummaryWriter("{}/runs/{}".format(folder_path, file_stamp))
-    with open("{}/runs/{}/{}".format(folder_path, file_stamp, "config.yml"), "w") as f:
-        yaml.dump(config, f, default_flow_style=False)
-
+    process_id = str(time.time())
+    writer = init_summary_writer(folder_path, process_id)
+    save_config(folder_path, process_id, config)
     save_models(
-        nets, config["net_name"], config["net_params"], folder_path, file_stamp, step=0
+        nets, config["net_name"], config["net_params"], folder_path, process_id, step=0
     )
 
     # init number of steps
@@ -86,7 +93,7 @@ def train(config, folder_path):
                     config["net_name"],
                     config["net_params"],
                     folder_path,
-                    file_stamp,
+                    process_id,
                     step=curr_step,
                 )
 
@@ -103,7 +110,7 @@ def train(config, folder_path):
         config["net_name"],
         config["net_params"],
         folder_path,
-        file_stamp,
+        process_id,
         step=curr_step,
     )
 

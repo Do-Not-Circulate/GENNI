@@ -1,4 +1,4 @@
-# GENNIm: Visualising the Geometry of Equivalences for Neural Network Identifiability
+# GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability
 
 ## Disclaimer
 

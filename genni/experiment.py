@@ -1,12 +1,10 @@
 import os
 
 import torch
-
 from ray import tune
 
-from .postprocessing import *
-from .training import *
-from .utils import *
+from .training import train
+from .utils import get_file_stamp
 
 config = {}
 
@@ -68,7 +66,9 @@ config["print_stat_freq"] = 25
 
 # --- Set up folder in which to store all results ---
 folder_name = get_file_stamp()
-cwd = os.environ["PATH_TO_DNC_FOLDER"]
+
+# TODO set to path where saving has to happen.
+cwd = os.environ["PATH_TO_GENNI_FOLDER"]
 folder_path = os.path.join(cwd, "experiments", folder_name)
 print(folder_path)
 os.makedirs(folder_path)
