@@ -21,9 +21,11 @@ setup(
         "pyyaml",
         "torch",
         "torchvision",
+        "tensorboard==2.3.0",
         "ray[tune]",
         "numpy",
         "matplotlib",
         "pandas",
+        "tqdm",
     ],
 )
