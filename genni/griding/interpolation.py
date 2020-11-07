@@ -14,6 +14,19 @@ def get_coordinates(v, basis_vectors, offset_v):
     coeffs = [float(torch.dot(adjusted_v, b) / torch.norm(b)) for b in basis_vectors]
     return coeffs
 
+def gram_schmidt_columns(X):
+    Q, R = np.linalg.qr(X)
+    return Q
+
+
+def create_offset_orthonorm_basis(center_model, basis_vectors):
+    basis_vectors = [
+        (basis_vectors[i] - get_params_vec(center_model)).detach().numpy()
+        for i in range(len(basis_vectors))
+    ]
+    basis_vectors = np.array(basis_vectors)
+    return gram_schmidt_columns(basis_vectors.T).T
+
 
 def get_models_grid(offset, basis_vectors, num_inter_models, grid_bound):
 
@@ -92,20 +105,6 @@ def get_model_interpolate_grid(
     val_arr = val_arr.reshape(*([num_inter_models] * len(basis_vectors)))
 
     return val_arr
-
-
-def gram_schmidt_columns(X):
-    Q, R = np.linalg.qr(X)
-    return Q
-
-
-def create_offset_orthonorm_basis(center_model, basis_vectors):
-    basis_vectors = [
-        (basis_vectors[i] - get_params_vec(center_model)).detach().numpy()
-        for i in range(len(basis_vectors))
-    ]
-    basis_vectors = np.array(basis_vectors)
-    return gram_schmidt_columns(basis_vectors.T).T
 
 
 if __name__ == "__main__":

@@ -31,22 +31,22 @@ def main(experiment_folder, exp_id, config, data_loader):
     config["basis_orthonorm_vectors"] = basis_orthonorm_vectors
 
 
-    coordinates = [
+    basis_coordinates = [
         get_coordinates(b, basis_orthonorm_vectors, get_params_vec(center_model))
         for b in basis_vectors
     ]
-    losses = [
+    basis_losses = [
         get_net_loss(
             vec_to_net(b, center_model), data_loader, criterion, full_dataset=True
         )
         for b in basis_vectors
     ]
+    config["basis_coordinates"] = basis_coordinates
+    config["basis_losses"] = basis_losses
 
-    # add center model coordinates
-    coordinates = [[0] * len(basis_vectors)] + coordinates
-    losses = [
-        get_net_loss(center_model, data_loader, criterion, full_dataset=True)
-    ] + losses
+    config["center_coordinates"] = [[0] * len(basis_vectors)]
+    config["center_loss"] = get_net_loss(center_model, data_loader, criterion, full_dataset=True)
+
 
     num_inter_models = config["num_inter_models"]
     grid_bound = config["grid_bound"]
@@ -67,4 +67,4 @@ def main(experiment_folder, exp_id, config, data_loader):
         time_stamp=True,
     )
 
-    return grid_vals, config, coordinates, losses
+    return grid_vals, config

@@ -50,17 +50,17 @@ elif config["net_name"] == "KeskarC3":
     config["net_params"] = [inp_dim, inp_dim, num_channels, out_dim]
 
 # Model Init
-config["num_nets"] = 5  # random initialization
+config["num_nets"] = 10  # random initialization
 config["model_seed"] = tune.grid_search([10])
 
 # Optimization method
 config["optimizer"] = "SGD"  # "Adam"
-config["learning_rate"] = 0.1  # tune.grid_search(list(np.linspace(0.00005, 0.015, 10)))
+config["learning_rate"] = 0.015  # tune.grid_search(list(np.linspace(0.00005, 0.015, 10)))
 config["momentum"] = 0
 config["batch_size"] = tune.grid_search([256])
 
 # Run time of optimization
-config["num_steps"] = 1001  # tune.grid_search([25000]) # roughly 50 * 500 / 16
+config["num_steps"] = 1000  # tune.grid_search([25000]) # roughly 50 * 500 / 16
 config["mean_loss_threshold"] = None  # 0.01 # 0.15
 
 # Parameters for saving and printing
