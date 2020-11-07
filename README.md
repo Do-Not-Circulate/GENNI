@@ -1,8 +1,11 @@
-# GENNIm: Visualising the Geometry of Equivalences for Neural Network Identifiability
+# GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability
 
 ## Disclaimer
 
-This is code associated with the paper "GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability," published in the [NeurIPS](https://nips.cc/) Workshop on [Differential Geometry meets Deep Learning 2020](https://sites.google.com/view/diffgeo4dl/).
+This is code associated with the paper "GENNI: Visualising the Geometry of
+Equivalences for Neural Network Identifiability," published in the
+[NeurIPS](https://nips.cc/) Workshop on [Differential Geometry meets Deep
+Learning 2020](https://sites.google.com/view/diffgeo4dl/).
 
 ## Preliminaries
 
@@ -46,7 +49,28 @@ optional arguments:
                         Number of random samples to generate
 ```
 
+
+How saving is done:
+
+Results are expected to saved in specific locations. If this code is not used to create equivalences classes, but the plotting functions want to be used, we advise to follow the structure laied out in get_grid.py and simply use the methods in interpolation.py which are agnostic to the saved locations. 
+
+### Run experiment.py to produce elements in equivalence classes
+
+### To check if the elements converged to elements in the equivalence class, run stats_plotting. 
+
+### Run the griding code to produce a set of elements in a subspace spanned by elements that were found. 
+
+### Subset the set by elements wiht loss less than some epsilon and choose appropriate plotting mechanism. 
+
+
+## Reproducing the paper
+
+- [ ] How to reproduce figures
+- [ ] How to reproduce values
+
 ## Citing
+
+If you use GENNI anywhere in your work, please cite use using
 
 ```
 @article{2020,
@@ -59,11 +83,12 @@ optional arguments:
 
 ## TODO LIST
 
-- [ ] Licence (pick a standard one)
+- [x] Licence (MIT)
 - [ ] Documentation
 - [ ] Github actions
   - Contributing
   - Pull request / Issues templates
 - [ ] Put on PyPI
+- [ ] Make environment?
 - [ ] CI
 - [ ] Make package conform to PEP and packaging standards
