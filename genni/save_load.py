@@ -107,15 +107,10 @@ def load_cached_data(experiment_folder, name, step=None, time_stamp=None):
     return cached_data, cached_meta_data
 
 
-def get_cached_data_list(experiment_folder):
-    pass
-
 
 def exp_models_path_generator(experiment_folder):
-    for curr_dir in os.listdir("{}/models".format(experiment_folder)):
-        if "DS_Store" in curr_dir:
-            continue
-        root = os.path.join("{}/models".format(experiment_folder), curr_dir)
+    for curr_dir in os.listdir(os.path.join(experiment_folder, "models")):
+        root = os.path.join(experiment_folder, "models", curr_dir)
         yield curr_dir, root
 
 
@@ -151,7 +146,7 @@ def load_model(PATH, device=None):
 def load_configs(experiment_folder):
     config_dir = {}
     for root, dirs, files in os.walk(
-        "{}/runs".format(experiment_folder), topdown=False
+        os.path.join(experiment_folder, "runs"), topdown=False
     ):
         if len(files) != 2:
             continue
@@ -160,13 +155,6 @@ def load_configs(experiment_folder):
             config = yaml.load(f)
         config_dir[curr_dir] = config
         config_dir[curr_dir]["net_params"] = tuple(config_dir[curr_dir]["net_params"])
-
-        if ("softmax_adaptive" in config_dir[curr_dir]) and (
-            isinstance(config_dir[curr_dir]["softmax_adaptive"], list)
-        ):
-            config_dir[curr_dir]["softmax_adaptive"] = tuple(
-                config_dir[curr_dir]["softmax_adaptive"]
-            )
 
     return pd.DataFrame(config_dir).T
 
