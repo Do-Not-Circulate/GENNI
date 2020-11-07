@@ -5,9 +5,7 @@ import numpy as np
 import torch
 from tqdm import tqdm
 
-from ..data_getters import *
-from ..postprocessing.postprocessing import *
-from ..utils import *
+from ..utils import vec_to_net, get_params_vec
 
 
 def get_coordinates(v, basis_vectors, offset_v):

@@ -8,10 +8,7 @@ import torch
 import torchvision
 from ray import tune
 
-from .data_getters import get_data
-from .postprocessing import *
-from .training import *
-from .utils import *
+import genni
 
 config = {}
 
@@ -36,7 +33,7 @@ num_channels = 1
 
 
 # network architecture
-config["net_name"] = "LeNet"
+config["net_name"] = "SimpleNet"
 
 if config["net_name"] == "SimpleNet":
     width = 2  # tune.grid_search([64])
@@ -53,7 +50,7 @@ elif config["net_name"] == "KeskarC3":
     config["net_params"] = [inp_dim, inp_dim, num_channels, out_dim]
 
 # Model Init
-config["num_nets"] = 10  # random initialization
+config["num_nets"] = 5  # random initialization
 config["model_seed"] = tune.grid_search([10])
 
 # Optimization method
@@ -63,7 +60,7 @@ config["momentum"] = 0
 config["batch_size"] = tune.grid_search([256])
 
 # Run time of optimization
-config["num_steps"] = 50001  # tune.grid_search([25000]) # roughly 50 * 500 / 16
+config["num_steps"] = 1001  # tune.grid_search([25000]) # roughly 50 * 500 / 16
 config["mean_loss_threshold"] = None  # 0.01 # 0.15
 
 # Parameters for saving and printing
@@ -72,17 +69,18 @@ config["print_stat_freq"] = 25
 
 
 # --- Set up folder in which to store all results ---
-folder_name = get_file_stamp()
-cwd = os.environ["PATH_TO_DNC_FOLDER"]
+folder_name = genni.utils.get_file_stamp()
+cwd = os.environ["PATH_TO_GENNI_FOLDER"]
 folder_path = os.path.join(cwd, "experiments", folder_name)
 print(folder_path)
 os.makedirs(folder_path)
 
+# Run experiements
 if config["device"] == "gpu":
     tune.run(
-        lambda config_inp: train(config_inp, folder_path),
+        lambda config_inp: genni.training.train(config_inp, folder_path),
         config=config,
         resources_per_trial={"gpu": 1},
     )  # have a lambda that init's different center models. and then each one has some number of models that search. right
 else:
-    tune.run(lambda config_inp: train(config_inp, folder_path), config=config)
+    tune.run(lambda config_inp: genni.training.train(config_inp, folder_path), config=config)

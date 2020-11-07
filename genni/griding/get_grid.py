@@ -1,12 +1,20 @@
 import torch
 
+import os
+
+from ..save_load import get_all_models, cache_data
+from .interpolation import create_offset_orthonorm_basis, get_coordinates, get_model_interpolate_grid
+from ..utils import get_params_vec, vec_to_net, get_net_loss
+
 
 # TODO how should we get the data?
-def main(experiment_folder, exp_id, config):
+def main(experiment_folder, exp_id, config, data_loader):
+
+    criterion = torch.nn.MSELoss()
 
     center_model = get_all_models(experiment_folder, config["center"]["step"])[
-        config["center"]["idx"]
-    ][str(center_idx)]
+        str(config["center"]["idx"])
+    ]
 
     basis_vectors = [
         get_params_vec(
@@ -64,6 +72,6 @@ def main(experiment_folder, exp_id, config):
         os.path.join(experiment_folder, exp_id),
         "{}d_loss".format(len(basis_vectors)),
         three_d_vals,
-        meta_dict=cache_dict,
+        meta_dict=config,
         time_stamp=True,
     )
