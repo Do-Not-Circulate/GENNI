@@ -1,0 +1,22 @@
+{
+	"seed": 0,
+	"device": "cpu",
+	"data_meta": {
+		"N": 16384,
+		"inp_dim": 12,
+		"out_dim": 1
+	},
+	"net_name": "SimpleNet",
+	"net_name": "SimpleNet",
+	"num_nets": 10,
+	"model_seed_param": [10],
+	"optimizer": "SGD",
+	"learning_rate": 0.015,
+	"momentum": 0,
+	"batch_size_param":[256],
+	"num_steps": 1000,
+	"mean_loss_threshold": null,
+	"save_model_freq": 25,
+	"print_stat_freq": 25,
+	"path_to_experiments": "User/blah/experiments/"
+}
