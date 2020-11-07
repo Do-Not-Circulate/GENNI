@@ -1,16 +1,14 @@
-import copy
 import datetime
-import os
 import random
 import socket
 
-import numpy as np
+import numpy
 import torch
-from torch.utils.data import DataLoader
 
 
 def get_file_stamp():
     """Return time and hostname as string for saving files related to the current experiment"""
+
     host_name = socket.gethostname()
     mydate = datetime.datetime.now()
     return "{}_{}".format(mydate.strftime("%b%d_%H-%M-%S"), host_name)

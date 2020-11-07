@@ -49,6 +49,20 @@ optional arguments:
                         Number of random samples to generate
 ```
 
+
+How saving is done:
+
+Results are expected to saved in specific locations. If this code is not used to create equivalences classes, but the plotting functions want to be used, we advise to follow the structure laied out in get_grid.py and simply use the methods in interpolation.py which are agnostic to the saved locations. 
+
+### Run experiment.py to produce elements in equivalence classes
+
+### To check if the elements converged to elements in the equivalence class, run stats_plotting. 
+
+### Run the griding code to produce a set of elements in a subspace spanned by elements that were found. 
+
+### Subset the set by elements wiht loss less than some epsilon and choose appropriate plotting mechanism. 
+
+
 ## Reproducing the paper
 
 - [ ] How to reproduce figures

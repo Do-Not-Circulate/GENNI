@@ -160,6 +160,7 @@ def load_configs(experiment_folder):
             config = yaml.load(f)
         config_dir[curr_dir] = config
         config_dir[curr_dir]["net_params"] = tuple(config_dir[curr_dir]["net_params"])
+
         if ("softmax_adaptive" in config_dir[curr_dir]) and (
             isinstance(config_dir[curr_dir]["softmax_adaptive"], list)
         ):
