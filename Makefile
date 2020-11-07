@@ -10,4 +10,4 @@ format_pyfiles:
 
 format_package: remove_unused_imports sort_imports format_pyfiles
 
-# Build pythong dist / wheels for PyPI
+# Build python dist / wheels for PyPI
