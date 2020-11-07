@@ -1,10 +1,8 @@
 import time
 
 import torch
-import yaml
 from torch import optim
 from torch.utils.data import DataLoader
-from torch.utils.tensorboard import SummaryWriter
 
 from .data_getters import get_data
 from .save_load import init_summary_writer, save_config, save_models

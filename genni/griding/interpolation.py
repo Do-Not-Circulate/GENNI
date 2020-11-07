@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-import numpy as np
-
->>>>>>> 830d9b148b4aa8a9f5c863b1e53e9ebdbeca7318
 import copy
 import itertools
 
@@ -14,9 +9,6 @@ from ..data_getters import *
 from ..postprocessing.postprocessing import *
 from ..utils import *
 
-from ..utils import *
-from ..data_getters import *
-from ..postprocessing.postprocessing import *
 
 def get_coordinates(v, basis_vectors, offset_v):
 
@@ -108,7 +100,6 @@ def gram_schmidt_columns(X):
     Q, R = np.linalg.qr(X)
     return Q
 
-<<<<<<< HEAD
 
 def create_offset_orthonorm_basis(center_model, basis_vectors):
     basis_vectors = [
@@ -118,14 +109,6 @@ def create_offset_orthonorm_basis(center_model, basis_vectors):
     basis_vectors = np.array(basis_vectors)
     return gram_schmidt_columns(basis_vectors.T).T
 
-=======
-def create_offset_orthonorm_basis(center_model, basis_vectors):
-    basis_vectors = [(basis_vectors[i] - get_params_vec(center_model)).detach().numpy() for i in range(len(basis_vectors))]
-    basis_vectors = np.array(basis_vectors)
-    return gram_schmidt_columns(basis_vectors.T).T
-
-
->>>>>>> 830d9b148b4aa8a9f5c863b1e53e9ebdbeca7318
 
 if __name__ == "__main__":
     pass

@@ -1,12 +1,12 @@
 import os
+import pickle
+import re
+import sys
 
 import numpy as np
 import pandas as pd
-<<<<<<< HEAD
-=======
-import pickle, os, yaml, sys, re
->>>>>>> 830d9b148b4aa8a9f5c863b1e53e9ebdbeca7318
 import torch
+import yaml
 from torch.utils.data import DataLoader
 
 from ..utils import *
@@ -23,6 +23,7 @@ def get_hp(cfs):
     hp_names = cfs.columns[filter_cols]
     hp_dict = {hp: cfs[hp].unique() for hp in hp_names}
     return hp_dict
+
 
 def get_models_loss(models, data_set, criterion, device=None, seed=None):
     set_seed(seed)
@@ -64,7 +65,6 @@ def get_exp_loss(experiment_folder, step, num_datapoints=-1, seed=0, device=None
         cache_data(experiment_folder, "loss", loss_dict, step=step)
 
     return loss_dict
-<<<<<<< HEAD
 
 
 def different_cols(df):
@@ -77,8 +77,6 @@ def get_hp(cfs):
     hp_names = cfs.columns[filter_cols]
     hp_dict = {hp: cfs[hp].unique() for hp in hp_names}
     return hp_dict
-=======
->>>>>>> 830d9b148b4aa8a9f5c863b1e53e9ebdbeca7318
 
 
 def get_end_stats(exp_folder, step=-1, with_min_max=False):
@@ -97,11 +95,7 @@ def get_end_stats(exp_folder, step=-1, with_min_max=False):
 
         # make this multi index. Otherwise should be mostly godo
         for nn in range(num_nets):
-<<<<<<< HEAD
             Loss_list = [loss[exp_id][str(nn)]]
-=======
-            Loss_list = [loss[exp_id][str(nn)] ]
->>>>>>> 830d9b148b4aa8a9f5c863b1e53e9ebdbeca7318
 
             stats_dict[str(exp_id)]["Loss Mean"] = np.mean(Loss_list)
 
@@ -133,19 +127,9 @@ def main():
         device = torch.device("cuda:0")
     else:
         device = None
-<<<<<<< HEAD
-        # device = torch.device("cpu")
-
-    # get_runs(experiment_folder, ["Loss", "Kish", "Potential", "Accuracy", "WeightVarTrace", "Norm",
-    #                          "Trace", "Gradient"])  # TODO does not find acc and var
 
     # # compute all loss over time
     f = lambda step: get_exp_loss(
         experiment_folder, step, num_datapoints=-1, device=device
     )
-=======
-
-    # # compute all loss over time 
-    f = lambda step: get_exp_loss(experiment_folder, step, num_datapoints=-1, device=device)
->>>>>>> 830d9b148b4aa8a9f5c863b1e53e9ebdbeca7318
     get_all_steps_f(experiment_folder, f)
