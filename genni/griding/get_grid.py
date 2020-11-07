@@ -60,7 +60,7 @@ def main(experiment_folder, exp_id, config, data_loader):
     )
 
     cache_data(
-        os.path.join(experiment_folder, exp_id),
+        experiment_folder,
         "{}d_loss".format(len(basis_vectors)),
         grid_vals,
         meta_dict=config,
