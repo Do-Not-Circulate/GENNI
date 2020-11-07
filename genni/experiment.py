@@ -1,7 +1,6 @@
 import os
 
 import torch
-
 from ray import tune
 
 from .training import train
