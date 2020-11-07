@@ -1,1 +1,1 @@
-import get_grid
+from . import get_grid

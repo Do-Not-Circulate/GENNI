@@ -12,7 +12,7 @@ def main(experiment_folder, exp_id, config, data_loader):
 
     criterion = torch.nn.MSELoss()
 
-    center_model = get_all_models(experiment_folder, config["center"]["step"])[
+    center_model = get_all_models(experiment_folder, config["center"]["step"])[exp_id][
         str(config["center"]["idx"])
     ]
 
@@ -30,15 +30,6 @@ def main(experiment_folder, exp_id, config, data_loader):
 
     config["basis_orthonorm_vectors"] = basis_orthonorm_vectors
 
-    get_coordinates(
-        basis_vectors[0], basis_orthonorm_vectors, get_params_vec(center_model)
-    )
-    get_coordinates(
-        basis_vectors[1], basis_orthonorm_vectors, get_params_vec(center_model)
-    )
-    get_coordinates(
-        basis_vectors[2], basis_orthonorm_vectors, get_params_vec(center_model)
-    )
 
     coordinates = [
         get_coordinates(b, basis_orthonorm_vectors, get_params_vec(center_model))
@@ -51,7 +42,7 @@ def main(experiment_folder, exp_id, config, data_loader):
         for b in basis_vectors
     ]
 
-    # add center model
+    # add center model coordinates
     coordinates = [[0] * len(basis_vectors)] + coordinates
     losses = [
         get_net_loss(center_model, data_loader, criterion, full_dataset=True)
@@ -76,4 +67,4 @@ def main(experiment_folder, exp_id, config, data_loader):
         time_stamp=True,
     )
 
-    return grid_vals, config
+    return grid_vals, config, coordinates, losses
