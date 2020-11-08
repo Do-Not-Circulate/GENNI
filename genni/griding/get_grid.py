@@ -1,10 +1,12 @@
 import torch
 
-import os
-
-from ..save_load import get_all_models, cache_data
-from .interpolation import create_offset_orthonorm_basis, get_coordinates, get_model_interpolate_grid
-from ..utils import get_params_vec, vec_to_net, get_net_loss
+from ..save_load import cache_data, get_all_models
+from ..utils import get_net_loss, get_params_vec, vec_to_net
+from .interpolation import (
+    create_offset_orthonorm_basis,
+    get_coordinates,
+    get_model_interpolate_grid,
+)
 
 
 # TODO how should we get the data?
@@ -30,7 +32,6 @@ def main(experiment_folder, exp_id, config, data_loader):
 
     config["basis_orthonorm_vectors"] = basis_orthonorm_vectors
 
-
     basis_coordinates = [
         get_coordinates(b, basis_orthonorm_vectors, get_params_vec(center_model))
         for b in basis_vectors
@@ -45,8 +46,9 @@ def main(experiment_folder, exp_id, config, data_loader):
     config["basis_losses"] = basis_losses
 
     config["center_coordinates"] = [[0] * len(basis_vectors)]
-    config["center_loss"] = get_net_loss(center_model, data_loader, criterion, full_dataset=True)
-
+    config["center_loss"] = get_net_loss(
+        center_model, data_loader, criterion, full_dataset=True
+    )
 
     num_inter_models = config["num_inter_models"]
     grid_bound = config["grid_bound"]

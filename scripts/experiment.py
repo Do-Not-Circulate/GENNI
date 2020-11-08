@@ -2,13 +2,12 @@ import os
 import pickle
 import sys
 
+import genni
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torchvision
 from ray import tune
-
-import genni
 
 config = {}
 
@@ -55,7 +54,9 @@ config["model_seed"] = tune.grid_search([10])
 
 # Optimization method
 config["optimizer"] = "SGD"  # "Adam"
-config["learning_rate"] = 0.015  # tune.grid_search(list(np.linspace(0.00005, 0.015, 10)))
+config[
+    "learning_rate"
+] = 0.015  # tune.grid_search(list(np.linspace(0.00005, 0.015, 10)))
 config["momentum"] = 0
 config["batch_size"] = tune.grid_search([256])
 
@@ -83,4 +84,6 @@ if config["device"] == "gpu":
         resources_per_trial={"gpu": 1},
     )  # have a lambda that init's different center models. and then each one has some number of models that search. right
 else:
-    tune.run(lambda config_inp: genni.training.train(config_inp, folder_path), config=config)
+    tune.run(
+        lambda config_inp: genni.training.train(config_inp, folder_path), config=config
+    )

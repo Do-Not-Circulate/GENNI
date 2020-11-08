@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from tqdm import tqdm
 
-from ..utils import vec_to_net, get_params_vec
+from ..utils import get_params_vec, vec_to_net
 
 
 def get_coordinates(v, basis_vectors, offset_v):
@@ -13,6 +13,7 @@ def get_coordinates(v, basis_vectors, offset_v):
     adjusted_v = v - offset_v
     coeffs = [float(torch.dot(adjusted_v, b) / torch.norm(b)) for b in basis_vectors]
     return coeffs
+
 
 def gram_schmidt_columns(X):
     Q, R = np.linalg.qr(X)

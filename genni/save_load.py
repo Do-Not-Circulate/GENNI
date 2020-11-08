@@ -107,7 +107,6 @@ def load_cached_data(experiment_folder, name, step=None, time_stamp=None):
     return cached_data, cached_meta_data
 
 
-
 def exp_models_path_generator(experiment_folder):
     for curr_dir in os.listdir(os.path.join(experiment_folder, "models")):
         root = os.path.join(experiment_folder, "models", curr_dir)
