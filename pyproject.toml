@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "genni"
-version = "0.1.0"
+version = "0.1.1"
 description = "GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability"
 license = "MIT"
 authors = [
@@ -16,12 +16,12 @@ readme = "README.md"
 homepage = "https://github.com/Do-Not-Circulate/GENNI_public"
 repository = "https://github.com/Do-Not-Circulate/GENNI_public"
 keywords = ["ml", "visualisation", "neural-networks", "diffgeom", "pytorch"]
-# classifiers = [
-#          "License :: OSI Approved :: MIT License",
-#          "Programming Language :: Python :: 3",
-#          "Programming Language :: Python :: 3.8",
-#          "Operating System :: OS Independent"
-# ]
+classifiers = [
+         "License :: OSI Approved :: MIT License",
+         "Programming Language :: Python :: 3",
+         "Programming Language :: Python :: 3.8",
+         "Operating System :: OS Independent"
+]
 
 [tool.poetry.dependencies]
 python = "~3.8"
