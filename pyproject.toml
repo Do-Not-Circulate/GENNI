@@ -1,3 +1,40 @@
+[tool.poetry]
+name = "genni"
+version = "0.1.0"
+description = "GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability"
+license = "MIT"
+authors = [
+        "Arinbjörn Kolbeinsson",
+        "Daniel Lengyel",
+        "Isak Falk <ucabitf@ucl.ac.uk>",
+        "Janith Petangoda",
+        "Kate Highnam",
+        "Michalis Lazarou"
+]
+maintainers = ["Isak Falk <ucabitf@ucl.ac.uk>", "Daniel Lengyel"]
+readme = "README.md"
+homepage = "https://github.com/Do-Not-Circulate/GENNI_public"
+repository = "https://github.com/Do-Not-Circulate/GENNI_public"
+keywords = ["ml", "visualisation", "neural-networks", "diffgeom", "pytorch"]
+# classifiers = [
+#          "License :: OSI Approved :: MIT License",
+#          "Programming Language :: Python :: 3",
+#          "Programming Language :: Python :: 3.8",
+#          "Operating System :: OS Independent"
+# ]
+
+[tool.poetry.dependencies]
+python = "~3.8"
+pyyaml = "^5.3.1"
+numpy = "^1.19.4"
+matplotlib = "^3.3.2"
+pandas = "^1.1.4"
+tqdm = "^4.51.0"
+torch = "^1.7.0"
+torchvision = "^0.8.1"
+tensorboard = "^2.3.0"
+ray = {extras = ["tune"], version = "^1.0.0"}
+
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry_core>=0.12"]
+build-backend = "poetry.masonry.api"

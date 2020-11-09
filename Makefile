@@ -12,8 +12,7 @@ format_package: remove_unused_imports sort_imports format_pyfiles
 
 # Build python dist / wheels for PyPI
 build_package:
-	python -m pep517.build . && twine check dist/*
+	poetry build
 
 upload_package: format_package build_package
-	python -m twine upload --repository testpypi dist/* --verbose
-
+	poetry publish
