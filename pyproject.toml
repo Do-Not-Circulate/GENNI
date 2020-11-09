@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "genni"
-version = "0.1.1"
+version = "0.1.2"
 description = "GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability"
 license = "MIT"
 authors = [
