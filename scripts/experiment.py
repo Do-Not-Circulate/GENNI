@@ -2,12 +2,13 @@ import os
 import pickle
 import sys
 
-import genni
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torchvision
 from ray import tune
+
+import genni
 
 config = {}
 
