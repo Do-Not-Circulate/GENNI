@@ -57,7 +57,34 @@ Results are expected to saved in specific locations. If this code is not used to
 
 ### Run the griding code to produce a set of elements in a subspace spanned by elements that were found.
 
-### Subset the set by elements wiht loss less than some epsilon and choose appropriate plotting mechanism.
+### Subset the set by elements wiht loss less than some epsilon and choose
+
+appropriate plotting mechanism.
+
+### Getting directories and run IDs
+
+After creating an experiment this will be dumped to **GENNI_HOME/experiment**
+where **GENNI_HOME** is set in the **genni.yml** file. An easy way to get the
+experiment directory and the run ids is to use the _tree_ command line argument
+as follows
+
+```sh
+tree $GENNI_HOME/experiments -d -L 3
+```
+
+An example output looks like
+
+```sh
+experiments
+└── Nov09_19-52-12_isak-arch
+    ├── models
+    │   └── 1604947934.637504
+    └── runs
+        └── 1604947934.637504
+```
+
+where `Nov09_19-52-12_isak-arch` is the identifier of the experiment and
+`1604947934.637504` is an ID of a hyperparameter setting of this experiment.
 
 ## Reproducing the paper
 

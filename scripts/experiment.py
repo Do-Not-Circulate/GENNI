@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torchvision
+import yaml
 from ray import tune
 
 import genni
@@ -72,9 +73,10 @@ config["print_stat_freq"] = 25
 
 # --- Set up folder in which to store all results ---
 folder_name = genni.utils.get_file_stamp()
-cwd = os.environ["PATH_TO_GENNI_FOLDER"]
-folder_path = os.path.join(cwd, "experiments", folder_name)
-print(folder_path)
+# Run this from top directory
+with open("genni.yml", "rb") as f:
+    genni_config = yaml.load(f)
+folder_path = os.path.join(genni_config["genni_home"], "experiments", folder_name)
 os.makedirs(folder_path)
 
 # Run experiements
