@@ -16,3 +16,7 @@ build_package:
 
 upload_package: format_package build_package
 	poetry publish
+
+# Conda env
+create_conda_env_file:
+	 conda env export > environment.yml
