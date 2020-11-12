@@ -75,7 +75,7 @@ config["print_stat_freq"] = 25
 folder_name = genni.utils.get_file_stamp()
 # Run this from top directory
 with open("genni.yml", "rb") as f:
-    genni_config = yaml.load(f)
+    genni_config = yaml.safe_load(f)
 folder_path = os.path.join(genni_config["genni_home"], "experiments", folder_name)
 os.makedirs(folder_path)
 
