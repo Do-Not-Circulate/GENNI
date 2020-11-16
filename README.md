@@ -1,8 +1,8 @@
-# GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability
+# [GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability](https://drive.google.com/file/d/1mGO-rLOZ-_TXu_-8KIfSUiFEqymxs2x5/view)
 
 ## Disclaimer
 
-This is code associated with the paper "GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability," published in the [NeurIPS](https://nips.cc/) Workshop on [Differential Geometry meets Deep Learning 2020](https://sites.google.com/view/diffgeo4dl/).
+This is code associated with the paper ["GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability,"](https://drive.google.com/file/d/1mGO-rLOZ-_TXu_-8KIfSUiFEqymxs2x5/view) published in the [NeurIPS](https://nips.cc/) Workshop on [Differential Geometry meets Deep Learning 2020](https://sites.google.com/view/diffgeo4dl/).
 
 **THIS REPOSITORY WILL BE UPDATED WITH FURTHER DOCUMENTATION SOON!!**
 
