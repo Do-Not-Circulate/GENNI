@@ -34,6 +34,7 @@ torch = "^1.7.0"
 torchvision = "^0.8.1"
 tensorboard = "^2.3.0"
 ray = {extras = ["tune"], version = "^1.0.0"}
+plotly = "^4.12.0"
 
 [build-system]
 requires = ["poetry_core>=0.12"]
