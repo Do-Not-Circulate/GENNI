@@ -9,7 +9,7 @@ import seaborn as sns
 import yaml
 from matplotlib import pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader
 
 from . import data_getters, griding, save_load, utils
 from .griding import interpolation
