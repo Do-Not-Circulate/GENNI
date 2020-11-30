@@ -111,7 +111,9 @@ def plot_surface(vals_filtered, grid_arr, meta_data, update_layout=False):
             autosize=False,
             width=1280,
             height=720,
-            font=dict(size=27,),
+            font=dict(
+                size=27,
+            ),
             scene={
                 "zaxis": dict(
                     title="log(J(θ))",
@@ -185,7 +187,9 @@ def plot_contour(
         fig.update_layout(
             title="",
             autosize=False,
-            font=dict(size=22,),
+            font=dict(
+                size=22,
+            ),
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             width=800,
@@ -230,7 +234,9 @@ def plot_3d(three_d_vals, grid_coeffs, grid_filter):
         autosize=False,
         width=1280,
         height=720,
-        font=dict(size=27,),
+        font=dict(
+            size=27,
+        ),
         scene={
             "zaxis": dict(title="c3", titlefont=dict(size=80)),
             "xaxis": dict(title="c1", titlefont=dict(size=80)),
@@ -286,7 +292,10 @@ def plot_umap(dataset, labels, projections, normalise=0.0025):
         bbox_transform=ax.transAxes,
         borderpad=0,
     )
-    cbar = ax.figure.colorbar(sm, cax=cax,)
+    cbar = ax.figure.colorbar(
+        sm,
+        cax=cax,
+    )
     cbar.outline.set_visible(False)
     cbar.ax.tick_params(size=0)
     cbar.ax.get_yaxis().labelpad = 5
