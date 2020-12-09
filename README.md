@@ -4,45 +4,49 @@
 
 This is code associated with the paper ["GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability,"](https://drive.google.com/file/d/1mGO-rLOZ-_TXu_-8KIfSUiFEqymxs2x5/view) published in the [NeurIPS](https://nips.cc/) Workshop on [Differential Geometry meets Deep Learning 2020](https://sites.google.com/view/diffgeo4dl/).
 
-**THIS REPOSITORY WILL BE UPDATED WITH FURTHER DOCUMENTATION SOON!!**
-
 If you have any questions, please feel free to reach out to us or make an issue.
 
-## Preliminaries
+## Installing
 
-Our package is designed to run in Python 3.6 and pip version 20.2.4....
+Genni is available from PyPI [here](https://pypi.org/project/genni/). In order
+to install simply use `pip`
 
-```
-pip install -r requirements.txt
+```sh
+pip install genni
 ```
 
 ## Usage
 
-To use our package...
+In order to use the package, please set `genni.yml` in the top directory of your
+project and add / set the variable `genni_home` pointing to where genni should keep
+all of the generated files.
+
+### Generating a run
+
+In order to calculate the approximate equivalence classes of parameters of your
+network architecture that leads to the same function you first need to create an
+experiment. An example file of how to do this can be found in
+`scripts/experiment.py` which has some architectures predefined, but you can add
+your own if you want to by looking at how the file is designed.
+
+Generating an experiment can be done by calling
 
 ```
-<details on library import and script execution go here>
+python scripts/experiment.py
 ```
-
-How saving is done:
-
-Results are expected to saved in specific locations. If this code is not used to create equivalences classes, but the plotting functions want to be used, we advise to follow the structure laied out in get_grid.py and simply use the methods in interpolation.py which are agnostic to the saved locations.
-
-### Run experiment.py to produce elements in equivalence classes
-
-* To check if the elements converged to elements in the equivalence class, run stats_plotting.
-* Run the griding code to produce a set of elements in a subspace spanned by elements that were found.
-* Subset the set by elements wiht loss less than some epsilon and choose an appropriate plotting mechanism.
 
 ### Getting directories and run IDs
 
-After creating an experiment this will be dumped to **GENNI_HOME/experiment** where **GENNI_HOME** is set in the **genni.yml** file. An easy way to get the experiment directory and the run ids is to use the _tree_ command line argument as follows:
+After generating an experiment this will populate `${GENNI_HOME}/experiment`
+with a directory having as a name the timestamp of when it was run. An easy way
+to look at the generated experiments is use the `tree` command. Below is an
+example output when running this after generating a couple of experiments
 
 ```sh
 tree $GENNI_HOME/experiments -d -L 3
 ```
 
-An example output looks like
+with the output
 
 ```sh
 experiments
@@ -55,6 +59,19 @@ experiments
 
 where `Nov09_19-52-12_isak-arch` is the identifier of the experiment and
 `1604947934.637504` is an ID of a hyperparameter setting of this experiment.
+
+## Plotting
+
+We have prepared a notebook called `notebooks/SubspaceAnalysis.ipynb` showing
+how to
+
+- Load your experiment together with necessary paths and experiment ids
+- Compute grids and values for plotting
+- Different ways of visualising the approximate equivalence classes in the form
+  of a
+  - Contour plot
+  - 3d iso-surface plot
+  - UMAP projected 2d plot of 3d iso-surface
 
 ## Citing
 

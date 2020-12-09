@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "genni"
-version = "0.1.2"
+version = "1.0.3"
 description = "GENNI: Visualising the Geometry of Equivalences for Neural Network Identifiability"
 license = "MIT"
 authors = [
@@ -34,6 +34,9 @@ torch = "^1.7.0"
 torchvision = "^0.8.1"
 tensorboard = "^2.3.0"
 ray = {extras = ["tune"], version = "^1.0.0"}
+plotly = "^4.12.0"
+umap_learn = "^0.4.6"
+seaborn = "^0.11.0"
 
 [build-system]
 requires = ["poetry_core>=0.12"]

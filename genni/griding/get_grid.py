@@ -1,3 +1,5 @@
+import os
+
 import torch
 
 from ..save_load import cache_data, get_all_models
@@ -61,12 +63,18 @@ def main(experiment_folder, exp_id, config, data_loader):
         center_model, basis_orthonorm_vectors, num_inter_models, grid_bound, func
     )
 
-    cache_data(
+    cache_folder = cache_data(
         experiment_folder,
         "{}d_loss".format(len(basis_vectors)),
         grid_vals,
         meta_dict=config,
         time_stamp=True,
     )
+
+    config["cache_folder"] = cache_folder
+    config["cache_name"] = {
+        "loss": "{}d_loss".format(len(basis_vectors)),
+        "timestamp": os.path.split(cache_folder)[-1],
+    }
 
     return grid_vals, config
