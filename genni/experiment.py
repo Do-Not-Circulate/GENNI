@@ -29,7 +29,14 @@ def extract_experiment(genni_config_path):
 
     exp_dict = OrderedDict()
     for child in genni_exp_dir.iterdir():
-        exp_dict[child.name] = [ids.name for ids in (child / "models").iterdir()]
+        if child.name == ".DS_Store":
+            continue
+
+        exp_dict[child.name] = []
+        for ids in (child / "models").iterdir():
+            if ids.name == ".DS_Store":
+                continue
+            exp_dict[child.name].append(ids.name)
     return genni_exp_dir, exp_dict
 
 
@@ -43,18 +50,16 @@ def create_experiment_folder_and_hyperparam_id(
 
 
 def create_data_loader(experiment_folder, exp_id, N=500, device="cpu"):
-    cache_dict = {}
     cfgs = save_load.load_configs(experiment_folder)
     cfg = cfgs.loc[exp_id]
     cfg["data_meta"]["N"] = N
-    cache_dict["N"] = cfg["data_meta"]["N"]
 
     data_set = data_getters.get_data(cfg, device=device)
     data_loader = DataLoader(
         data_set, batch_size=cfgs.loc[exp_id]["batch_size"], shuffle=False
     )
 
-    return cfg, cache_dict, data_loader
+    return data_loader, cfg 
 
 
 ## Plotting
@@ -64,8 +69,8 @@ def plot_surface(vals_filtered, grid_arr, meta_data, update_layout=False):
         data=[
             go.Surface(
                 z=vals_filtered + 0,
-                x=grid_arr,
-                y=grid_arr,
+                x=grid_arr[0, :, 1],
+                y=grid_arr[0, :, 1],
                 colorscale="viridis",
                 name="log(J(θ))",  # cmax=0.001, cmin=0,
                 colorbar=dict(
@@ -158,8 +163,8 @@ def plot_contour(
         data=[
             go.Contour(
                 z=np.log(vals_filtered),
-                x=grid_arr,
-                y=grid_arr,
+                x=grid_arr[0, :, 1],
+                y=grid_arr[0, :, 1],
                 colorscale="viridis",
                 colorbar=dict(title="log(J(θ))"),
             ),
@@ -201,7 +206,8 @@ def plot_contour(
     return fig
 
 
-def plot_3d(three_d_vals, grid_coeffs, grid_filter):
+def plot_3d(filtered_vals, grid_coeffs):
+    grid_coeffs = grid_coeffs.reshape(-1, 3)
     fig = go.Figure(
         data=[
             go.Scatter3d(
@@ -211,7 +217,7 @@ def plot_3d(three_d_vals, grid_coeffs, grid_filter):
                 mode="markers",
                 marker=dict(
                     size=10,
-                    color=three_d_vals.reshape(-1)[grid_filter],
+                    color=filtered_vals.reshape(-1),
                     colorscale="viridis",
                     opacity=1,
                     colorbar=dict(
@@ -305,8 +311,7 @@ def plot_umap(dataset, labels, projections, normalise=0.0025):
     return fig, ax
 
 
-def setup_2d_plot(
-    cache_dict,
+def setup_eps_equivalent_set(
     experiment_folder,
     exp_id,
     data_loader,
@@ -319,23 +324,22 @@ def setup_2d_plot(
     precomputed_data=False,
     precomputed_timestamp="",
 ):
-    """Set up the data for the 2d plot
+    """Set up the epsilon equivalent set. 
 
-    Setup for plotting a 2d plot from three GENNI models following the optimisation
+    Setup to consutrct an epsilon equivalent set with N dimensional parameters from N+1 GENNI models following the optimisation
     trajectory until `step`. Basis vector span a space
     (after Gram-Schmidt normalisation) with the center vector being the center of
     reference such that colour indicates the distance in function space of the
     vector at a point on the grid with this center. grid_bound and num_inter_models specify
     the grid as np.linspace(grid_bound[0], grid_bound[1], num_inter_models).
 
-    returns two_d_vals and meta_data necessary for plotting later.
+    returns the loss values of elements which are in the epsilon equivalent set and meta_data necessary for plotting later.
 
-    :param cache_dict: cache dictionary with experiment information
     :param experiment_folder: path to experiment folder
     :param exp_id: experiment unique identifier of the run
     :param step: step of the optimisation path from GENNI to visualise
     :param center_vector_id: id of the parameter vector at time `step` that we use as origin
-    :param basis_vector_id: id of the parameter vectors at time `step` that we use as axis 1 and 2
+    :param basis_vector_ids: N ids of the parameter vectors at time `step` that we use to span the N dimensional space
     :param grid_bound: upper and lower bound of the grid
     :param num_inter_models: number of points in the grid
     :param filter_threshold: threshold below which we consider things to be equal
@@ -343,88 +347,33 @@ def setup_2d_plot(
     :param precomputed_timestamp: specifying the precomputed data directory
     """
     if precomputed_data:
-        two_d_vals, cache_dict = save_load.load_cached_data(
-            experiment_folder, "2d_loss", time_stamp=precomputed_timestamp
+        loss_vals, cache_dict = save_load.load_cached_data(
+            experiment_folder, "{}d_loss".format(len(basis_vector_ids)), time_stamp=precomputed_timestamp
         )
     else:
+        cache_dict = {}
+        cache_dict["data_points"] = len(data_loader.dataset)
+
         # Center model
         cache_dict["center"] = {"step": step, "idx": center_vector_id}
 
         # Basis Vectors
         cache_dict["basis_vectors"] = {
-            "steps": [step, step],
+            "steps": [step] * len(basis_vector_ids),
             "model_idxs": basis_vector_ids,
         }
 
         cache_dict["num_inter_models"] = num_inter_models
         cache_dict["grid_bound"] = grid_bound
 
-        two_d_vals, meta_data = griding.get_grid.main(
+        loss_vals, cache_dict = griding.get_grid.main(
             experiment_folder, exp_id, cache_dict, data_loader
         )
 
-    vals_filtered = np.array(two_d_vals)
-    vals_filtered[vals_filtered > filter_threshold] = None
-    grid_arr = np.linspace(grid_bound[0], grid_bound[1], num_inter_models)
-    return vals_filtered, two_d_vals, grid_arr, meta_data, cache_dict
+    vals = np.array(loss_vals)
+    grid_arr = grid_coeffs = np.array(list(itertools.product(np.linspace(grid_bound[0], grid_bound[1], num_inter_models), repeat=len(basis_vector_ids)))).reshape(*vals.shape, -1)
+    return vals, grid_arr, vals <= filter_threshold, cache_dict
 
-
-def setup_3d_plot(
-    cache_dict,
-    experiment_folder,
-    exp_id,
-    data_loader,
-    step=1001,
-    center_vector_id=0,
-    basis_vector_ids=[0, 1, 2],
-    grid_bound=[-20, 25],
-    num_inter_models=35,
-    filter_threshold=0.05,
-):
-    """Set up the data for the 3d plot
-
-    Setup for plotting a 3d plot from three GENNI models following the optimisation
-    trajectory until `step`. Basis vector span a space
-    (after Gram-Schmidt normalisation) with the center vector being the center of
-    reference such that colour indicates the distance in function space of the
-    vector at a point on the grid with this center. grid_bound and num_inter_models specify
-    the grid as np.linspace(grid_bound[0], grid_bound[1], num_inter_models).
-
-    returns two_d_vals and meta_data necessary for plotting later.
-
-    :param cache_dict: cache dictionary with experiment information
-    :param experiment_folder: path to experiment folder
-    :param exp_id: experiment unique identifier of the run
-    :param step: step of the optimisation path from GENNI to visualise
-    :param center_vector_id: id of the parameter vector at time `step` that we use as origin
-    :param basis_vector_id: id of the parameter vectors at time `step` that we use as axis 1 and 2 and third dimension
-    :param grid_bound: upper and lower bound of the grid
-    :param num_inter_models: number of points in the grid
-    :param filter_threshold: threshold below which we consider things to be equal
-    """
-    # Center model
-    cache_dict["center"] = {"step": step, "idx": center_vector_id}
-
-    # Basis Vectors
-    cache_dict["basis_vectors"] = {
-        "steps": [step, step, step],
-        "model_idxs": basis_vector_ids,
-    }
-
-    cache_dict["num_inter_models"] = num_inter_models
-    cache_dict["grid_bound"] = grid_bound
-
-    three_d_vals, meta_data = griding.get_grid.main(
-        experiment_folder, exp_id, cache_dict, data_loader
-    )
-    grid_filter = three_d_vals.reshape(-1) < filter_threshold
-    # First dim is z axis, and last dimension x axis. This is because of how we need to loop (from last basis vector to first)
-    grid_coeffs = itertools.product(
-        np.linspace(grid_bound[0], grid_bound[1], num_inter_models), repeat=3
-    )
-    grid_coeffs = np.array(list(grid_coeffs))[grid_filter]
-
-    return three_d_vals, grid_coeffs, grid_filter, meta_data, cache_dict
 
 
 def setup_umap(
@@ -458,7 +407,8 @@ def setup_umap(
     )
 
     # Filter grid
-    filtered_grid = grid.reshape(np.prod(grid.shape[:-1]), -1)[grid_filter]
+    filtered_grid = grid[grid_filter]
+    filtered_grid = filtered_grid.reshape(np.prod(filtered_grid.shape[:-1]), -1)
     center_array = utils.get_params_vec(center_model).detach().numpy()
     bases_arrays = []
     bases_arrays.extend([b.detach().numpy() for b in basis_vectors])
@@ -474,7 +424,7 @@ def setup_umap(
     l3 = cache_dict_3d["basis_losses"][2]
 
     # Merge fit with labels
-    labels = np.concatenate([three_d_vals.reshape(-1)[grid_filter], [lO, l1, l2, l3]])
+    labels = np.concatenate([three_d_vals[grid_filter].reshape(-1), [lO, l1, l2, l3]])
 
     dataset = pd.DataFrame(
         {"x1": projections[:-4, 0], "x2": projections[:-4, 1], "label": labels[:-4]}
