@@ -1,0 +1,61 @@
+N: 500
+basis_coordinates:
+- [-1.6825997829437256, -3.725290742551124e-09, 3.3527612686157227e-08]
+- [-1.2556530237197876, -0.4062860906124115, -4.470348358154297e-08]
+- [-0.761082649230957, 0.010256589390337467, -0.6631895899772644]
+basis_losses: [4.988964428775944e-05, 0.00020943988056387752, 4.3385671233409084e-05]
+basis_orthonorm_vectors:
+- !!python/object/apply:torch._utils._rebuild_tensor_v2
+  - !!python/object/apply:torch.storage._load_from_bytes
+    - !!binary |
+      gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
+      AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
+      aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
+      Z2UKcQFYDwAAADE0MDIwNDkyNTk2NDY1NnECWAMAAABjcHVxA0sKTnRxBFEugAJdcQBYDwAAADE0
+      MDIwNDkyNTk2NDY1NnEBYS4KAAAAAAAAALSq976H7Q6/Z0QjP2W5Wj+bZ6e+sVjJPr4IQT6QjyS9
+      NoBgvhRgtTw=
+  - 0
+  - !!python/tuple [4]
+  - !!python/tuple [3]
+  - false
+  - !!python/object/apply:collections.OrderedDict
+    - []
+- !!python/object/apply:torch._utils._rebuild_tensor_v2
+  - !!python/object/apply:torch.storage._load_from_bytes
+    - !!binary |
+      gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
+      AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
+      aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
+      Z2UKcQFYDwAAADE0MDIwNDkyNjAxOTEyMHECWAMAAABjcHVxA0sKTnRxBFEugAJdcQBYDwAAADE0
+      MDIwNDkyNjAxOTEyMHEBYS4KAAAAAAAAAIftDr9nRCM/ZblaP5tnp76xWMk+vghBPpCPJL02gGC+
+      FGC1PM7sQj8=
+  - 0
+  - !!python/tuple [4]
+  - !!python/tuple [3]
+  - false
+  - !!python/object/apply:collections.OrderedDict
+    - []
+- !!python/object/apply:torch._utils._rebuild_tensor_v2
+  - !!python/object/apply:torch.storage._load_from_bytes
+    - !!binary |
+      gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
+      AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
+      aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
+      Z2UKcQFYDwAAADE0MDIwNDkyNTk1NDAwMHECWAMAAABjcHVxA0sKTnRxBFEugAJdcQBYDwAAADE0
+      MDIwNDkyNTk1NDAwMHEBYS4KAAAAAAAAAGdEIz9luVo/m2envrFYyT6+CEE+kI8kvTaAYL4UYLU8
+      zuxCP7/7Hz8=
+  - 0
+  - !!python/tuple [4]
+  - !!python/tuple [3]
+  - false
+  - !!python/object/apply:collections.OrderedDict
+    - []
+basis_vectors:
+  model_idxs: [1, 2, 3]
+  steps: [1001, 1001, 1001]
+center: {idx: 0, step: 1001}
+center_coordinates:
+- [0, 0, 0]
+center_loss: 6.752359435480138e-11
+grid_bound: [-2, 2]
+num_inter_models: 50

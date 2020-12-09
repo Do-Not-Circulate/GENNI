@@ -1,0 +1,22 @@
+batch_size: 256
+data_meta:
+  N: 8192
+  inp_dim: 28
+  out_dim: 1
+device: cpu
+learning_rate: 0.001
+mean_loss_threshold: null
+model_seed: 0
+momentum: 0
+net_name: LeNet
+net_params:
+- 28
+- 28
+- 1
+- 1
+num_nets: 5
+num_steps: 1000
+optimizer: SGD
+print_stat_freq: 25
+save_model_freq: 25
+seed: 0

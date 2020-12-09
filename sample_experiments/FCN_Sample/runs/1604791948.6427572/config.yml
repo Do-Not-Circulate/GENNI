@@ -1,0 +1,23 @@
+batch_size: 256
+data_meta:
+  N: 16384
+  inp_dim: 1
+  out_dim: 1
+device: cpu
+learning_rate: 0.015
+mean_loss_threshold: null
+model_seed: 10
+momentum: 0
+net_name: SimpleNet
+net_params:
+- 1
+- 1
+- 2
+- 1
+- false
+num_nets: 10
+num_steps: 1000
+optimizer: SGD
+print_stat_freq: 25
+save_model_freq: 25
+seed: 0
