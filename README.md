@@ -35,7 +35,7 @@ Generating an experiment can be done by calling
 python scripts/experiment.py
 ```
 
-##### We have included a sample_experiments directory with the trained models that were used to genereate the images in the paper. 
+##### We have included a experiments directory with the trained models that were used to genereate the images in the paper. 
 
 ### Getting directories and run IDs
 
@@ -74,6 +74,8 @@ how to
   - Contour plot
   - 3d iso-surface plot
   - UMAP projected 2d plot of 3d iso-surface
+  
+#### You can use FCN_Sample or LeNet_Sample in experiments to replicate the plots seen in the paper. Simply choose the correct experimnet index in the second cell.
 
 ## Citing
 
