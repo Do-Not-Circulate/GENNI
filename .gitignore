@@ -1,5 +1,6 @@
 .DS_Store
 # experiments/
+genni.yml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
