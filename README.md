@@ -75,9 +75,9 @@ how to
   - 3d iso-surface plot
   - UMAP projected 2d plot of 3d iso-surface
   
-#### You can use FCN_Sample or LeNet_Sample in experiments to replicate the plots seen in the paper. 
-Choose experiment_idx=1 for FCN_Sample and experiment_idx=0 for LeNet_Sample in the second cell of the notebook. 
-#### The griding parameters are set for FCN_Sample, to run LeNet_Sample change grid_bounds to [-20, 20].
+#### How to use FCN_Sample or LeNet_Sample to replicate the plots seen in the paper: 
+In the second cell of the notebook, choose experiment_idx=1 for FCN_Sample and experiment_idx=0 for LeNet_Sample.
+The griding parameters are set for FCN_Sample, to run LeNet_Sample change grid_bounds to [-20, 20].
 
 ## Citing
 
