@@ -35,6 +35,8 @@ Generating an experiment can be done by calling
 python scripts/experiment.py
 ```
 
+##### We have included a sample_experiments directory with the trained models that were used to genereate the images in the paper. 
+
 ### Getting directories and run IDs
 
 After generating an experiment this will populate `${GENNI_HOME}/experiment`
